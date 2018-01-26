@@ -80,7 +80,7 @@ module NetSuite
         self.wsdl = wsdl
       else
         if sandbox
-          wsdl_path = File.expand_path("../../../wsdl/sandbox/#{api_version}.wsdl", __FILE__)
+          # wsdl_path = File.expand_path("../../../wsdl/sandbox/#{api_version}.wsdl", __FILE__)
           wsdl_path = "https://#{wsdl_domain}/wsdl/v#{api_version}_0/netsuite.wsdl" unless File.exists? wsdl_path
         else
           wsdl_path = File.expand_path("../../../wsdl/production/#{api_version}.wsdl", __FILE__)
@@ -97,7 +97,7 @@ module NetSuite
       else
         # if sandbox, this parameter is ignored
         if sandbox
-          'webservices.sandbox.netsuite.com'
+          'system.sandbox.netsuite.com'
         else
           attributes[:wsdl_domain] ||= 'webservices.netsuite.com'
         end
