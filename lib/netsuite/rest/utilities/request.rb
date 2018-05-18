@@ -40,7 +40,7 @@ module NetSuite
             #   http.set_debug_output(NetSuite::Configuration.logger)
             # end
 
-            http.start { |http| http.request(method) }
+            http.start { |h| h.request(method) }
           end
 
           def auth_header(email, signature)
@@ -48,7 +48,12 @@ module NetSuite
           end
 
           def determine_uri(uri, sandbox)
-            URI((sandbox ? SANDBOX_API : PRODUCTION_API) + uri)
+            uri = URI((sandbox ? SANDBOX_API : PRODUCTION_API) + uri)
+            if NetSuite::Configuration.compid
+              uri.query = [uri.query, NetSuite::Configuration.compid].compact.join('&')
+            end
+
+            uri
           end
 
           def encode(unencoded_string)

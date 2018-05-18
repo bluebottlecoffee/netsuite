@@ -266,6 +266,18 @@ module NetSuite
       end
     end
 
+    def compid=(compid)
+      attributes[:compid] = compid
+    end
+
+    def compid(compid = nil)
+      if compid
+        self.compid = compid
+      else
+        attributes[:compid]
+      end
+    end
+
     def consumer_key=(consumer_key)
       attributes[:consumer_key] = consumer_key
     end

@@ -30,7 +30,6 @@ module NetSuite
       def self.call(credentials)
         passport = NetSuite::Configuration.auth_header.dup
 
-
         passport['platformMsgs:passport'] ||= {}
         passport['platformMsgs:passport']['platformCore:email'] = credentials[:email] || ''
         passport['platformMsgs:passport']['platformCore:password'] = credentials[:password] || ''
@@ -39,7 +38,7 @@ module NetSuite
         if passport['platformMsgs:tokenPassport']
           passport['platformMsgs:passport']['platformCore:account'] ||= passport['platformMsgs:tokenPassport']['platformCore:account']
         end
-        
+
         passport['platformMsgs:passport']['platformCore:account'] = credentials[:account] if !credentials[:account].nil?
 
         passport.delete('platformMsgs:tokenPassport')
