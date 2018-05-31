@@ -371,4 +371,14 @@ describe NetSuite::Configuration do
     end
   end
 
+  describe '#host' do
+    it 'sets the host if passed value' do
+      config.host = 'https://test.com'
+      expect(config.host).to eql('https://test.com')
+    end
+
+    it 'uses the wsdl domain as a default' do
+      expect(config.host).to eql('https://webservices.netsuite.com')
+    end
+  end
 end
