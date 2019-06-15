@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://nebula.prod.int'
 gemspec
 
 gem 'simplecov', :require => false
