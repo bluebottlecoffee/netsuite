@@ -1,17 +1,17 @@
 module NetSuite
   module Records
-    class Classification
+    class SupportCaseType
       include Support::Fields
       include Support::RecordRefs
       include Support::Records
       include Support::Actions
-      include Namespaces::ListAcct
+      include Namespaces::ListSupport
 
-      actions :add, :get, :get_list, :delete, :upsert, :search
+      actions :get
 
-      fields :name, :include_children, :is_inactive, :class_translation_list, :custom_field_list, :parent
-
-      field :subsidiary_list, RecordRefList
+      fields :description, :is_inactive, :name
+      
+      record_refs :insert_before
 
       attr_reader   :internal_id
       attr_accessor :external_id
@@ -21,7 +21,6 @@ module NetSuite
         @external_id = attributes.delete(:external_id) || attributes.delete(:@external_id)
         initialize_from_attributes_hash(attributes)
       end
-
     end
   end
 end

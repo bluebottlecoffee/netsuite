@@ -82,6 +82,7 @@ module NetSuite
     autoload :BillingScheduleRecurrence,        'netsuite/records/billing_schedule_recurrence'
     autoload :BillingScheduleRecurrenceList,    'netsuite/records/billing_schedule_recurrence_list'
     autoload :Bin,                              'netsuite/records/bin'
+    autoload :BinNumber,                        'netsuite/records/bin_number'
     autoload :BinNumberList,                    'netsuite/records/bin_number_list'
     autoload :BinTransfer,                      'netsuite/records/bin_transfer'
     autoload :BinTransferInventory,             'netsuite/records/bin_transfer_inventory'
@@ -129,6 +130,9 @@ module NetSuite
     autoload :CustomerSubscription,             'netsuite/records/customer_subscription'
     autoload :CustomerSubscriptionsList,        'netsuite/records/customer_subscriptions_list'
     autoload :CustomerStatus,                   'netsuite/records/customer_status'
+    autoload :CustomerPartner,                  'netsuite/records/customer_partner'
+    autoload :CustomerSalesTeam,                'netsuite/records/customer_sales_team'
+    autoload :CustomerSalesTeamList,            'netsuite/records/customer_sales_team_list'
     autoload :ContactList,                      'netsuite/records/contact_list'
     autoload :Contact,                          'netsuite/records/contact'
     autoload :ContactAddressbook,               'netsuite/records/contact_addressbook'
@@ -151,6 +155,7 @@ module NetSuite
     autoload :DiscountItem,                     'netsuite/records/discount_item'
     autoload :Duration,                         'netsuite/records/duration'
     autoload :Employee,                         'netsuite/records/employee'
+    autoload :EntityCustomField,                'netsuite/records/entity_custom_field'
     autoload :File,                             'netsuite/records/file'
     autoload :GiftCertificate,                  'netsuite/records/gift_certificate'
     autoload :GiftCertificateItem,              'netsuite/records/gift_certificate_item'
@@ -201,8 +206,10 @@ module NetSuite
     autoload :Location,                         'netsuite/records/location'
     autoload :LocationsList,                    'netsuite/records/locations_list'
     autoload :LotNumberedAssemblyItem,          'netsuite/records/lot_numbered_assembly_item'
+    autoload :LotNumberedInventoryItem,         'netsuite/records/lot_numbered_inventory_item'
     autoload :MatrixOptionList,                 'netsuite/records/matrix_option_list'
     autoload :MemberList,                       'netsuite/records/member_list'
+    autoload :Message,                          'netsuite/records/message'
     autoload :NonInventorySaleItem,             'netsuite/records/non_inventory_sale_item'
     autoload :NonInventoryPurchaseItem,         'netsuite/records/non_inventory_purchase_item'
     autoload :NonInventoryResaleItem,           'netsuite/records/non_inventory_resale_item'
@@ -217,9 +224,14 @@ module NetSuite
     autoload :PaymentMethod,                    'netsuite/records/payment_method'
     autoload :PayrollItem,                      'netsuite/records/payroll_item'
     autoload :PhoneCall,                        'netsuite/records/phone_call'
+    autoload :Price,                            'netsuite/records/price'
     autoload :PriceLevel,                       'netsuite/records/price_level'
+    autoload :PriceList,                        'netsuite/records/price_list'
+    autoload :Pricing,                          'netsuite/records/pricing'
     autoload :PricingMatrix,                    'netsuite/records/pricing_matrix'
     autoload :PromotionCode,                    'netsuite/records/promotion_code'
+    autoload :PromotionsList,                   'netsuite/records/promotions_list'
+    autoload :Promotions,                       'netsuite/records/promotions'
     autoload :PurchaseOrder,                    'netsuite/records/purchase_order'
     autoload :PurchaseOrderItemList,            'netsuite/records/purchase_order_item_list'
     autoload :PurchaseOrderItem,                'netsuite/records/purchase_order_item'
@@ -236,9 +248,11 @@ module NetSuite
     autoload :SalesOrderShipGroupList,          'netsuite/records/sales_order_ship_group_list'
     autoload :SalesOrderItem,                   'netsuite/records/sales_order_item'
     autoload :SalesOrderItemList,               'netsuite/records/sales_order_item_list'
+    autoload :SalesRole,                        'netsuite/records/sales_role'
     autoload :SalesTaxItem,                     'netsuite/records/sales_tax_item'
     autoload :ServiceResaleItem,                'netsuite/records/service_resale_item'
     autoload :ServiceSaleItem,                  'netsuite/records/service_sale_item'
+    autoload :SerializedAssemblyItem,          'netsuite/records/serialized_assembly_item'
     autoload :SerializedInventoryItem,          'netsuite/records/serialized_inventory_item'
     autoload :SerializedInventoryItemNumbers,       'netsuite/records/serialized_inventory_item_numbers'
     autoload :SerializedInventoryItemNumbersList,   'netsuite/records/serialized_inventory_item_numbers_list'
@@ -249,11 +263,14 @@ module NetSuite
     autoload :Subsidiary,                       'netsuite/records/subsidiary'
     autoload :SubtotalItem,                     'netsuite/records/subtotal_item'
     autoload :SupportCase,                      'netsuite/records/support_case'
+    autoload :SupportCaseType,                  'netsuite/records/support_case_type'
     autoload :TaxType,                          'netsuite/records/tax_type'
     autoload :TaxGroup,                         'netsuite/records/tax_group'
     autoload :Task,                             'netsuite/records/task'
     autoload :Term,                             'netsuite/records/term'
     autoload :TimeBill,                         'netsuite/records/time_bill'
+    autoload :TransactionBodyCustomField,       'netsuite/records/transaction_body_custom_field'
+    autoload :TransactionColumnCustomField,     'netsuite/records/transaction_column_custom_field'
     autoload :TransactionShipGroup,             'netsuite/records/transaction_ship_group'
     autoload :TransferOrder,                    'netsuite/records/transfer_order'
     autoload :TransferOrderItemList,            'netsuite/records/transfer_order_item_list'
@@ -293,25 +310,6 @@ module NetSuite
 
   def self.configure(&block)
     NetSuite::Configuration.instance_eval(&block)
-  end
-
-  def self.configure_from_env(&block)
-    NetSuite.configure do
-      reset!
-
-      email         ENV['NETSUITE_EMAIL']     unless ENV['NETSUITE_EMAIL'].nil?
-      password      ENV['NETSUITE_PASSWORD']  unless ENV['NETSUITE_PASSWORD'].nil?
-      account       ENV['NETSUITE_ACCOUNT']   unless ENV['NETSUITE_ACCOUNT'].nil?
-      role          ENV['NETSUITE_ROLE']      unless ENV['NETSUITE_ROLE'].nil?
-      api_version   ENV['NETSUITE_API']       unless ENV['NETSUITE_API'].nil?
-      sandbox       (ENV['NETSUITE_PRODUCTION'].nil? || ENV['NETSUITE_PRODUCTION'] != 'true')
-      wsdl          ENV['NETSUITE_WSDL']      unless ENV['NETSUITE_WSDL'].nil?
-      silent        (!ENV['NETSUITE_SILENT'].nil? && ENV['NETSUITE_SILENT'] == 'true')
-
-      read_timeout  100_000
-    end
-
-    self.configure(&block) if block
   end
 
 end

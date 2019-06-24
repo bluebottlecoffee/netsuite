@@ -28,6 +28,14 @@ module NetSuite
       # </platformCore:wsRoleList>
 
       def self.call(credentials)
+
+        soap_header = {}
+        if !credentials[:application_id].nil? && !credentials[:application_id].empty?
+          soap_header = NetSuite::Configuration.soap_header.dup
+          soap_header['platformMsgs:ApplicationInfo'] ||= {}
+          soap_header['platformMsgs:ApplicationInfo']['platformMsgs:applicationId'] = credentials[:application_id]
+        end
+
         passport = NetSuite::Configuration.auth_header.dup
 
         passport['platformMsgs:passport'] ||= {}
@@ -44,7 +52,7 @@ module NetSuite
         passport.delete('platformMsgs:tokenPassport')
 
         begin
-          response = NetSuite::Configuration.connection(soap_header: {}).call :login, message: passport
+          response = NetSuite::Configuration.connection(soap_header: soap_header).call :login, message: passport
         rescue Savon::SOAPFault => e
           error_details = e.to_hash[:fault]
 
